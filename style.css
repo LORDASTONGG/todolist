@@ -93,11 +93,24 @@ label {
 }
 
 input[type="text"],
-input[type="password"],
-input[type="url"] {
+input[type="password"] {
     width: 100%;
     padding: 0.9rem 1rem;
     border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: var(--transition);
+    margin-bottom: 0.5rem;
+}
+
+input[type="url"],
+input[type="url"].additional-url {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border-color);
+    margin-top: 0.25rem;
     border-radius: var(--border-radius);
     background-color: var(--input-bg);
     color: var(--text-color);
