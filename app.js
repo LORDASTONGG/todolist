@@ -42,6 +42,8 @@ function login() {
 async function addTask() {
     const taskText = newTaskInput.value.trim();
     const taskUrl = document.getElementById('taskUrl').value.trim();
+    const taskUrl2 = document.getElementById('taskUrl2').value.trim();
+    const taskUrl3 = document.getElementById('taskUrl3').value.trim();
     const addButton = document.querySelector('button[onclick="addTask()"]');
     const originalButtonHTML = addButton.innerHTML;
 
@@ -63,13 +65,17 @@ async function addTask() {
         await addDoc(tasksCollection, {
             text: taskText,
             url: taskUrl,
+            url2: taskUrl2,
+            url3: taskUrl3,
             completed: false,
             timestamp: now.toISOString(),
             displayTime: now.toLocaleString('tr-TR')
         });
         
-        // Clear URL input after adding task
+        // Clear URL inputs after adding task
         document.getElementById('taskUrl').value = '';
+        document.getElementById('taskUrl2').value = '';
+        document.getElementById('taskUrl3').value = '';
         
         // Başarılı mesajı göster ve input'u temizle
         newTaskInput.value = '';
@@ -156,34 +162,40 @@ function renderTasks() {
         const escapedText = task.text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         const formattedTime = formatDate(task.displayTime || task.timestamp);
         
-        // Check if task has a URL
-        const hasUrl = task.url && task.url.trim() !== '';
-        let urlContent = '';
-        
-        if (hasUrl) {
+        // Function to create URL HTML
+        const createUrlHtml = (url, index) => {
+            if (!url || url.trim() === '') return '';
+            
             // Ensure URL has http:// or https://
-            let url = task.url.trim();
-            if (!url.match(/^https?:\/\//)) {
-                url = 'http://' + url;
+            let processedUrl = url.trim();
+            if (!processedUrl.match(/^https?:\/\//)) {
+                processedUrl = 'http://' + processedUrl;
             }
             
-            // Create a URL object to validate the URL
             try {
-                const urlObj = new URL(url);
+                const urlObj = new URL(processedUrl);
                 const domain = urlObj.hostname.replace('www.', '');
-                urlContent = `
+                return `
                     <div class="todo-url">
-                        <a href="${url}" class="task-link" target="_blank" rel="noopener noreferrer">
-                            ${domain}
+                        <a href="${processedUrl}" class="task-link" target="_blank" rel="noopener noreferrer">
+                            ${index ? index + '. ' : ''}${domain}
                         </a>
-                        <a href="${url}" class="url-button" target="_blank" rel="noopener noreferrer" title="${url}">
+                        <a href="${processedUrl}" class="url-button" target="_blank" rel="noopener noreferrer" title="${processedUrl}">
                             RESİM TIKLA
                         </a>
                     </div>`;
             } catch (e) {
-                console.error('Invalid URL:', url);
+                console.error('Invalid URL:', processedUrl);
+                return '';
             }
-        }
+        };
+        
+        // Create URL content for all three URL fields
+        const urlContent = [
+            createUrlHtml(task.url, 1),
+            createUrlHtml(task.url2, 2),
+            createUrlHtml(task.url3, 3)
+        ].filter(html => html !== '').join('');
         
         return `
         <div class="todo-item ${task.completed ? 'completed' : ''}" data-id="${task.id}">
