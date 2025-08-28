@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yapılacaklar Listesi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Login Section -->
+        <div class="login-section" id="loginSection">
+            <div class="login-form">
+                <div class="login-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h2>Yönetici Paneli</h2>
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" placeholder="Kullanıcı adınızı girin">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="••••••••">
+                    </div>
+                </div>
+                <button type="button" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Giriş Yap</span>
+                </button>
+                <div class="error-message" id="errorMessage"></div>
+            </div>
+        </div>
+
+        <!-- Todo Section -->
+        <div class="todo-section" id="todoSection">
+            <div class="header">
+                <h1>Yapılacaklar Listesi</h1>
+                <p>Görevlerinizi yönetin ve takip edin</p>
+            </div>
+
+            <div class="admin-controls">
+                <div class="form-group">
+                    <div class="input-with-button">
+                        <input type="text" id="newTask" placeholder="Yeni görev ekle...">
+                        <button onclick="addTask()">
+                            <i class="fas fa-plus"></i>
+                            <span>Ekle</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="todo-list" id="todoList">
+                <!-- Tasks will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, orderBy, query } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-fwAfLTdvlgarXFEdmgmpHRetAdnJmRE",
+            authDomain: "todo-e35f8.firebaseapp.com",
+            projectId: "todo-e35f8",
+            storageBucket: "todo-e35f8.firebasestorage.app",
+            messagingSenderId: "571850075680",
+            appId: "1:571850075680:web:58851aef1b012635159645"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        // Make db available globally
+        window.db = db;
+        window.firebaseModules = {
+            collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, orderBy, query
+        };
+    </script>
+
+
+<script>
+    // Sayfa yüklendiğinde gerekli ayarları yap
+    document.addEventListener('DOMContentLoaded', function () {
+        // Sağ tık menüsünü devre dışı bırak
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Geliştirici araçları kısayollarını engelleme
+        document.addEventListener('keydown', function (e) {
+            // F11 (tam ekran)
+            if (e.key === 'F11') {
+                e.preventDefault();
+                return false;
+            }
+
+            // F12 (geliştirici araçları)
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+
+            // Ctrl+Shift+I (geliştirici araçları)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+
+            // Ctrl+U (kaynak kodu görüntüle)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
