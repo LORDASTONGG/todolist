@@ -93,7 +93,8 @@ label {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+input[type="url"] {
     width: 100%;
     padding: 0.9rem 1rem;
     border: 1px solid var(--border-color);
@@ -106,7 +107,8 @@ input[type="password"] {
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus {
+input[type="password"]:focus,
+input[type="url"]:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(124, 77, 255, 0.2);
@@ -173,6 +175,36 @@ button:active {
     font-size: 2.2rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+}
+
+/* URL Link Styles */
+a.task-link {
+    color: #4a90e2;
+    text-decoration: none;
+    word-break: break-all;
+    transition: color 0.2s ease;
+}
+
+a.task-link:hover {
+    color: #7ab1ff;
+    text-decoration: underline;
+}
+
+.url-button {
+    display: inline-block;
+    background-color: #4a90e2;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.url-button:hover {
+    background-color: #7ab1ff;
+    text-decoration: none;
 }
 
 /* Todo List */
@@ -391,13 +423,74 @@ button:active {
 /* Task Content */
 .todo-content {
     flex: 1;
-    margin-right: 1rem;
+    min-width: 0;
 }
 
-.todo-header {
+.todo-url {
+    margin: 8px 0;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.todo-url .task-link {
+    color: #4a90e2;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.todo-url .task-link:hover {
+    text-decoration: underline;
+}
+
+.url-button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.url-button:hover {
+    background-color: #3a80d2;
+    text-decoration: none;
+}
+
+.input-with-button {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.input-with-button input[type="url"] {
+    margin-top: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.input-row input[type="text"] {
+    flex: 1;
+    margin: 0;
+}
+
+.add-button {
+    padding: 0 1rem;
+    white-space: nowrap;
+    margin: 0;
+    width: auto;
     margin-bottom: 0.5rem;
 }
 
