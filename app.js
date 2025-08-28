@@ -41,6 +41,7 @@ function login() {
 // Add new task
 async function addTask() {
     const taskText = newTaskInput.value.trim();
+    const taskUrl = document.getElementById('taskUrl').value.trim();
     const addButton = document.querySelector('button[onclick="addTask()"]');
     const originalButtonHTML = addButton.innerHTML;
 
@@ -61,10 +62,14 @@ async function addTask() {
         const now = new Date();
         await addDoc(tasksCollection, {
             text: taskText,
+            url: taskUrl,
             completed: false,
             timestamp: now.toISOString(),
             displayTime: now.toLocaleString('tr-TR')
         });
+        
+        // Clear URL input after adding task
+        document.getElementById('taskUrl').value = '';
         
         // Başarılı mesajı göster ve input'u temizle
         newTaskInput.value = '';
@@ -151,6 +156,35 @@ function renderTasks() {
         const escapedText = task.text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
         const formattedTime = formatDate(task.displayTime || task.timestamp);
         
+        // Check if task has a URL
+        const hasUrl = task.url && task.url.trim() !== '';
+        let urlContent = '';
+        
+        if (hasUrl) {
+            // Ensure URL has http:// or https://
+            let url = task.url.trim();
+            if (!url.match(/^https?:\/\//)) {
+                url = 'http://' + url;
+            }
+            
+            // Create a URL object to validate the URL
+            try {
+                const urlObj = new URL(url);
+                const domain = urlObj.hostname.replace('www.', '');
+                urlContent = `
+                    <div class="todo-url">
+                        <a href="${url}" class="task-link" target="_blank" rel="noopener noreferrer">
+                            ${domain}
+                        </a>
+                        <a href="${url}" class="url-button" target="_blank" rel="noopener noreferrer" title="${url}">
+                            RESİM TIKLA
+                        </a>
+                    </div>`;
+            } catch (e) {
+                console.error('Invalid URL:', url);
+            }
+        }
+        
         return `
         <div class="todo-item ${task.completed ? 'completed' : ''}" data-id="${task.id}">
             <div class="todo-content">
@@ -160,6 +194,7 @@ function renderTasks() {
                         ${task.completed ? 'Tamamlandı' : 'Bekliyor'}
                     </span>
                 </div>
+                ${urlContent}
                 <div class="todo-timestamp">
                     <i class="far fa-clock"></i>
                     ${formattedTime}
